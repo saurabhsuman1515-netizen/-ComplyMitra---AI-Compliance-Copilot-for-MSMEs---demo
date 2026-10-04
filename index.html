@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ComplyMitra - compliance helper for small businesses</title>
+<style>
+:root{
+  --bg:#dff4ff;
+  --fg:#17324d;
+  --card:#f7fcff;
+  --line:#a9d7ed;
+  --acc:#168dcc;
+  --acc-dark:#0d73aa;
+  --red:#d94a4a;
+  --org:#e68a18;
+  --grn:#15966d;
+  --shadow:0 8px 24px rgba(20,100,145,.10);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px)
+}
+*{box-sizing:border-box}
+
+html,body{min-height:100%;width:100%}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 10%,rgba(255,255,255,.75),transparent 28%),
+    radial-gradient(circle at 90% 20%,rgba(255,255,255,.55),transparent 25%),
+    linear-gradient(135deg,#e8f8ff 0%,#d8f2ff 48%,#c9edff 100%);
+  color:var(--fg);
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:15px;
+  line-height:1.4;
+}
+
+.wrap{
+  width:100%;
+  max-width:1180px;
+  min-height:100vh;
+  margin:0 auto;
+  padding:28px 30px 40px;
+}
+
+h1{
+  margin:0;
+  font-size:30px;
+  font-weight:700;
+  letter-spacing:-.5px
+}
+h2{
+  font-size:19px;
+  margin:4px 0 12px
+}
+.sub{
+  color:var(--acc-dark);
+  margin:3px 0 20px;
+  font-size:14px;
+  font-weight:500
+}
+
+.tabs{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-bottom:18px
+}
+.tabs button{
+  flex:1;
+  min-width:150px
+}
+
+button,input,select,textarea{
+  font:inherit;
+  color:var(--fg);
+  background:rgba(255,255,255,.82);
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:10px 12px;
+  transition:.18s ease
+}
+button{
+  cursor:pointer;
+  background:rgba(255,255,255,.72);
+  font-weight:600
+}
+button:hover{
+  transform:translateY(-1px);
+  box-shadow:0 5px 14px rgba(20,100,145,.12)
+}
+button:focus,input:focus,select:focus,textarea:focus{
+  outline:none;
+  border-color:var(--acc);
+  box-shadow:0 0 0 3px rgba(22,141,204,.13)
+}
+button.on,button.pri{
+  background:linear-gradient(135deg,#159bdc,#147fbe);
+  color:#fff;
+  border-color:#147fbe;
+  box-shadow:0 5px 14px rgba(20,127,190,.20)
+}
+
+.card{
+  background:rgba(247,252,255,.88);
+  border:1px solid rgba(169,215,237,.9);
+  border-radius:14px;
+  padding:17px;
+  margin-bottom:12px;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(7px)
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:13px
+}
+@media (max-width:720px){
+  .wrap{padding:22px 16px 32px}
+  .grid{grid-template-columns:1fr}
+  h1{font-size:26px}
+}
+@media (max-width:520px){
+  .tabs button{min-width:100%;flex:none}
+}
+
+label{
+  display:block;
+  font-size:13px;
+  margin-bottom:4px;
+  font-weight:600
+}
+input,select,textarea{width:100%}
+input[type=checkbox]{width:auto}
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start
+}
+.badge{
+  font-size:12px;
+  padding:4px 9px;
+  border-radius:12px;
+  color:#fff;
+  white-space:nowrap;
+  font-weight:600
+}
+.b-r{background:var(--red)}
+.b-o{background:var(--org)}
+.b-g{background:var(--grn)}
+.b-d{background:#6b7785}
+
+.docs{
+  margin-top:10px;
+  padding-top:7px;
+  border-top:1px solid #d8ebf5
+}
+.docs label{
+  display:flex;
+  gap:7px;
+  align-items:center;
+  font-size:14px;
+  margin:5px 0;
+  font-weight:400
+}
+.small{
+  font-size:12px;
+  opacity:.78
+}
+.done .t{
+  text-decoration:line-through;
+  opacity:.6
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:12px
+}
+.stats div{
+  flex:1;
+  text-align:center;
+  margin-bottom:0
+}
+.stats b{
+  display:block;
+  font-size:22px;
+  color:var(--acc-dark)
+}
+a.btn{
+  display:inline-block;
+  padding:8px 11px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  color:var(--fg);
+  text-decoration:none;
+  font-size:13px;
+  background:rgba(255,255,255,.8);
+  font-weight:600
+}
+a.btn:hover{
+  background:#fff;
+  transform:translateY(-1px)
+}
+.hide{display:none}
+.res b{font-size:20px}
+
+textarea{
+  resize:vertical;
+  min-height:150px
+}
+
+ul{
+  padding-left:22px
+}
+li{
+  margin:5px 0
+}
+
+@media (max-width:520px){
+  .stats{grid-template-columns:1fr}
+  .row{flex-direction:column}
+  .badge{align-self:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <h1>ComplyMitra</h1>
+ <div class="sub">Know what is due. Know what to submit. Don't pay late fees.</div>
+ <div class="tabs">
+  <button data-tab="profile" class="on">1. My business</button>
+  <button data-tab="cal">2. What's due</button>
+  <button data-tab="notice">3. Notice reader</button>
+  <button data-tab="pen">4. Penalty meter</button>
+ </div>
+
+ <!-- 1. profile -->
+ <div id="profile">
+  <div class="card">
+   <h2>Tell us about your business</h2>
+   <div class="grid">
+    <div><label>Business name</label><input id="name" placeholder="e.g. Ramesh Bakery"></div>
+    <div><label>Business type</label><select id="type"><option value="food">Food (bakery, restaurant, kirana)</option><option value="retail">Retail shop</option><option value="service">Service / freelancer</option><option value="mfg">Small manufacturer</option></select></div>
+    <div><label>GST scheme</label><select id="gst"><option value="regular">Regular - monthly returns</option><option value="qrmp">QRMP - quarterly returns</option><option value="comp">Composition scheme</option><option value="none">Not GST registered</option></select></div>
+    <div><label>Yearly turnover</label><select id="slab"><option value="s">Up to Rs 1.5 crore</option><option value="m">Rs 1.5 - 5 crore</option><option value="l">Above Rs 5 crore</option></select></div>
+    <div><label>Number of employees</label><input id="staff" type="number" min="0" value="0"></div>
+    <div><label>WhatsApp number (optional)</label><input id="phone" placeholder="10 digit mobile"></div>
+    <div id="fssaiBox"><label>FSSAI licence expiry date</label><input id="fssai" type="date"></div>
+    <div><label>Shop / trade licence expiry date</label><input id="shop" type="date"></div>
+   </div>
+   <p><label style="display:inline"><input id="tds" type="checkbox"> I deduct TDS (salary / contractor payments)</label></p>
+   <button class="pri" id="saveP">Show what's due</button>
+   <button id="demoP">Load demo (Ramesh Bakery)</button>
+  </div>
+ </div>
+
+ <!-- 2. calendar -->
+ <div id="cal" class="hide">
+  <div class="stats" id="stats"></div>
+  <div id="list"></div>
+ </div>
+
+ <!-- 3. notice -->
+ <div id="notice" class="hide">
+  <div class="card">
+   <h2>Paste a notice, get the tasks</h2>
+   <p class="small">Paste the text of a GST / tax notice. We find the type, dates and amount, and turn it into a task with a document list.</p>
+   <textarea id="ntext" rows="7" placeholder="Paste notice text here..."></textarea>
+   <p><button class="pri" id="readN">Read notice</button> <button id="sampleN">Use a sample notice</button></p>
+   <div id="nout"></div>
+  </div>
+ </div>
+
+ <!-- 4. penalty -->
+ <div id="pen" class="hide">
+  <div class="card">
+   <h2>What will a late GSTR-3B cost me?</h2>
+   <div class="grid">
+    <div><label>Yearly turnover</label><select id="pslab"><option value="s">Up to Rs 1.5 crore</option><option value="m">Rs 1.5 - 5 crore</option><option value="l">Above Rs 5 crore</option></select></div>
+    <div><label>Return type</label><select id="pnil"><option value="0">Has tax to pay</option><option value="1">Nil return</option></select></div>
+    <div><label>Tax still unpaid (Rs)</label><input id="ptax" type="number" min="0" value="50000"></div>
+    <div><label>Due date</label><input id="pdue" type="date"></div>
+    <div><label>Date you will file / pay</label><input id="pfile" type="date"></div>
+   </div>
+   <p><button class="pri" id="calcP">Calculate</button></p>
+   <div id="pout" class="res"></div>
+   <p class="small">Late fee: Rs 50/day (Rs 20 for nil), capped at Rs 2,000 / 5,000 / 10,000 by turnover (Rs 500 for nil). Interest: 18% a year on unpaid tax. Always confirm on gst.gov.in.</p>
+  </div>
+ </div>
+
+ <p class="small">Prototype note: due-date rules are built in for the common GST, TDS, PF/ESI and licence items. The notice reader looks for keywords and dates in pasted text. WhatsApp buttons open a chat with the reminder text filled in. Your data stays in this browser only. Please verify dates on the official portals.</p>
+</div>
+
+<script>
+// ComplyMitra prototype - plain JS, no libraries
+var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var today=new Date(); today.setHours(0,0,0,0);
+var S={profile:null,done:{},checks:{},extra:[]};
+
+function $(id){return document.getElementById(id)}
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function fmt(d){return d.getDate()+' '+MON[d.getMonth()]+' '+d.getFullYear()}
+function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function daysFrom(d){return Math.round((d-today)/864e5)}
+function load(){try{var x=localStorage.getItem('cm_state');if(x)S=JSON.parse(x)}catch(e){}}
+function save(){try{localStorage.setItem('cm_state',JSON.stringify(S))}catch(e){}}
+
+// document lists for each task type
+var DOCS={
+ gstr1:['Sales invoices of the month','Credit / debit notes','B2C sales summary','HSN summary'],
+ gstr3b:['GSTR-1 summary','Purchase invoices (for ITC)','GSTR-2B statement from portal','Bank balance for tax payment'],
+ cmp08:['Quarter turnover summary','Tax payment challan'],
+ gstr4:['Yearly turnover summary','CMP-08 challans of the year'],
+ gstr9:['All 12 months GSTR-1 and 3B','Purchase and sales books','ITC reconciliation'],
+ tds:['TDS amount calculation','PAN of people paid','Challan payment details'],
+ tdsret:['All TDS challans of the quarter','Deductee PAN list','Salary / contractor payment sheet'],
+ pf:['Salary register','Employee UAN list','ECR file','Bank balance for payment'],
+ esi:['Salary register','Employee ESI numbers','Contribution calculation'],
+ lic:['Copy of current licence','ID and address proof','Last renewal receipt','Renewal fee payment']
+};
+
+// the rules engine: builds the task list from the business profile
+function makeTasks(p){
+ var out=[];
+ function add(id,title,due,note,docs,gst){
+  var diff=daysFrom(due);
+  if(diff>=-7&&diff<=120)out.push({id:id,title:title,due:due,note:note,docs:docs,gst:!!gst});
+ }
+ for(var i=-1;i<=5;i++){
+  var b=new Date(today.getFullYear(),today.getMonth()+i,1),y=b.getFullYear(),m=b.getMonth();
+  var prev=MON[(m+11)%12], key=y+'-'+m, q=(m%3==0);
+  if(p.gst=='regular'){
+   add('g1-'+key,'GSTR-1 (sales return)',new Date(y,m,11),'For '+prev,DOCS.gstr1,true);
+   add('g3-'+key,'GSTR-3B (tax summary + payment)',new Date(y,m,20),'For '+prev,DOCS.gstr3b,true);
+  }
+  if(p.gst=='qrmp'&&q){
+   add('q1-'+key,'GSTR-1 (quarterly sales return)',new Date(y,m,13),'For last quarter',DOCS.gstr1,true);
+   add('q3-'+key,'GSTR-3B (quarterly)',new Date(y,m,22),'Due 22nd or 24th depending on your state',DOCS.gstr3b,true);
+  }
+  if(p.gst=='comp'&&q)add('c8-'+key,'CMP-08 (composition tax payment)',new Date(y,m,18),'For last quarter',DOCS.cmp08,true);
+  if(p.gst=='comp'&&m==3)add('c4-'+key,'GSTR-4 (annual return)',new Date(y,m,30),'For last financial year',DOCS.gstr4,true);
+  if(p.gst=='regular'&&m==11)add('g9-'+key,'GSTR-9 (annual return)',new Date(y,m,31),'If applicable to your turnover',DOCS.gstr9,true);
+  if(p.tds){
+   add('t-'+key,'TDS payment',new Date(y,m,7),'For '+prev,DOCS.tds);
+   if([0,4,6,9].indexOf(m)>=0)add('tr-'+key,'TDS return (quarterly)',new Date(y,m,31),'For last quarter',DOCS.tdsret);
+  }
+  if(p.staff>=20)add('pf-'+key,'PF payment and ECR',new Date(y,m,15),'For '+prev,DOCS.pf);
+  if(p.staff>=10)add('esi-'+key,'ESI contribution',new Date(y,m,15),'For '+prev,DOCS.esi);
+ }
+ if(p.type=='food'&&p.fssai)add('fssai','FSSAI licence renewal',new Date(p.fssai+'T00:00:00'),'Renew before this date',DOCS.lic);
+ if(p.shop)add('shop','Shop / trade licence renewal',new Date(p.shop+'T00:00:00'),'Renew before this date',DOCS.lic);
+ S.extra.forEach(function(e){out.push({id:e.id,title:e.title,due:new Date(e.due+'T00:00:00'),note:e.note,docs:e.docs,gst:false})});
+ out.sort(function(a,b){return a.due-b.due});
+ return out;
+}
+
+function waLink(t){
+ var msg='Reminder from ComplyMitra: '+t.title+' is due on '+fmt(t.due)+'. Keep ready: '+t.docs.join(', ')+'.';
+ var ph=(S.profile&&S.profile.phone||'').replace(/\D/g,'');
+ if(ph.length==10)ph='91'+ph;
+ return 'https://wa.me/'+ph+'?text='+encodeURIComponent(msg);
+}
+
+function renderCal(){
+ if(!S.profile){$('list').innerHTML='<div class="card">Fill in your business details first (tab 1).</div>';$('stats').innerHTML='';return}
+ var tasks=makeTasks(S.profile),overdue=0,soon=0,dn=0,h='';
+ tasks.forEach(function(t,ti){
+  var d=daysFrom(t.due),isDone=S.done[t.id],cls,txt;
+  if(isDone){dn++;cls='b-d';txt='Done'}
+  else if(d<0){overdue++;cls='b-r';txt=(-d)+' days overdue'}
+  else if(d<=7){soon++;cls='b-o';txt=d==0?'Due today':'In '+d+' days'}
+  else{cls='b-g';txt='In '+d+' days'}
+  h+='<div class="card '+(isDone?'done':'')+'"><div class="row"><div><b class="t">'+esc(t.title)+'</b><div class="small">'+fmt(t.due)+' - '+esc(t.note)+'</div></div><span class="badge '+cls+'">'+txt+'</span></div><div class="docs">';
+  t.docs.forEach(function(x,i){
+   var k=t.id+'|'+i;
+   h+='<label><input type="checkbox" data-k="'+k+'" '+(S.checks[k]?'checked':'')+'> '+esc(x)+'</label>';
+  });
+  h+='</div><p style="margin:8px 0 0"><button data-done="'+t.id+'">'+(isDone?'Undo done':'Mark done')+'</button> <a class="btn" target="_blank" rel="noopener" href="'+waLink(t)+'">WhatsApp reminder</a>';
+  if(t.gst)h+=' <button data-pen="'+ti+'">Late fee?</button>';
+  h+='</p></div>';
+ });
+ if(!tasks.length)h='<div class="card">Nothing due in the next 4 months for this profile.</div>';
+ $('stats').innerHTML='<div class="card"><b>'+overdue+'</b>overdue</div><div class="card"><b>'+soon+'</b>due in 7 days</div><div class="card"><b>'+dn+'</b>done</div>';
+ $('list').innerHTML='<h2>'+esc(S.profile.name||'Your business')+' - what is due</h2>'+h;
+ $('list').onclick=function(e){
+  var t=e.target;
+  if(t.dataset.done){S.done[t.dataset.done]=!S.done[t.dataset.done];save();renderCal()}
+  if(t.dataset.pen!==undefined){var x=makeTasks(S.profile)[t.dataset.pen];$('pdue').value=iso(x.due);$('pfile').value=iso(new Date(Math.max(today,x.due)));$('pslab').value=S.profile.slab;show('pen')}
+  if(t.dataset.k){S.checks[t.dataset.k]=t.checked;save()}
+ };
+}
+
+// profile
+function readProfile(){
+ return {name:$('name').value.trim(),type:$('type').value,gst:$('gst').value,slab:$('slab').value,staff:+$('staff').value||0,
+  phone:$('phone').value,fssai:$('fssai').value,shop:$('shop').value,tds:$('tds').checked};
+}
+function fillProfile(p){
+ ['name','type','gst','slab','staff','phone','fssai','shop'].forEach(function(k){$(k).value=p[k]||''});
+ $('tds').checked=!!p.tds;fssaiToggle();
+}
+function fssaiToggle(){$('fssaiBox').style.display=$('type').value=='food'?'block':'none'}
+$('type').onchange=fssaiToggle;
+$('saveP').onclick=function(){S.profile=readProfile();save();renderCal();show('cal')};
+$('demoP').onclick=function(){
+ var a=new Date(today);a.setDate(a.getDate()+25);var b=new Date(today);b.setDate(b.getDate()+200);
+ fillProfile({name:'Ramesh Bakery, Ghaziabad',type:'food',gst:'regular',slab:'s',staff:4,phone:'',fssai:iso(a),shop:iso(b),tds:false});
+};
+
+// notice reader - looks for keywords, dates and amounts
+var KINDS=[
+ ['ASMT-10','Scrutiny notice: mismatch found in your returns. Reply is filed in Form ASMT-11.',['Copy of the notice','GSTR-1, 3B and 2B for the period','Sales and purchase invoices','Reconciliation sheet','Reply draft']],
+ ['DRC-01','Demand / show cause notice. Reply is filed in Form DRC-06.',['Copy of the notice','Invoices and ledger for the period','Proof of tax paid','Reply draft','Authorised person ID']],
+ ['REG-17','Notice for cancellation of GST registration. Reply in Form REG-18.',['Copy of the notice','Proof of business address','Returns filed so far','Reply draft']],
+ ['GSTR-3A','Notice for not filing a return. File the pending return quickly.',['Copy of the notice','Pending return data','Bank balance for tax and late fee']],
+ ['income tax','Income tax notice. Check the section and reply on the e-filing portal.',['Copy of the notice','PAN and login details','Bank statements','Books of accounts']]
+];
+function findDates(t){
+ var r=[],m,re1=/\b(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})\b/g,re2=/\b(\d{1,2})(?:st|nd|rd|th)?\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?,?\s+(\d{4})\b/gi;
+ while((m=re1.exec(t)))r.push({i:m.index,d:new Date(+m[3],+m[2]-1,+m[1])});
+ while((m=re2.exec(t)))r.push({i:m.index,d:new Date(+m[3],MON.indexOf(m[2].slice(0,1).toUpperCase()+m[2].slice(1,3).toLowerCase()),+m[1])});
+ return r.sort(function(a,b){return a.i-b.i});
+}
+$('sampleN').onclick=function(){
+ var d=new Date(today);d.setDate(d.getDate()-2);
+ $('ntext').value='GSTIN: 09ABCDE1234F1Z5\nNotice No. ASMT-10/2026/0457\nDate of issue: '+fmt(d)+'\nSubject: Scrutiny of returns for FY 2025-26\nA difference of Rs 48,250 has been noticed between GSTR-1 and GSTR-3B. You are requested to reply within 15 days of this notice with an explanation.';
+};
+$('readN').onclick=function(){
+ var t=$('ntext').value;if(!t.trim()){$('nout').innerHTML='<p>Please paste a notice first.</p>';return}
+ var low=t.toLowerCase(),kind=null;
+ KINDS.forEach(function(k){if(!kind&&low.indexOf(k[0].toLowerCase())>=0)kind=k});
+ if(!kind)kind=['Notice','Notice from the tax department. Read the section and the reply date carefully.',['Copy of the notice','Related returns','Invoices and ledger','Reply draft']];
+ var ds=findDates(t),due=null,w=low.match(/within\s+(\d+)\s+days/),by=t.match(/(?:on or before|before|by)\s+(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{4})/i);
+ if(by){var x=findDates(by[1]);if(x.length)due=x[0].d}
+ else if(w&&ds.length){due=new Date(ds[0].d);due.setDate(due.getDate()+ +w[1])}
+ else if(ds.length)due=ds[ds.length-1].d;
+ var amt=t.match(/(?:Rs\.?|INR|₹)\s?([\d,]+(?:\.\d+)?)/i),gstin=t.match(/\b\d{2}[A-Z]{5}\d{4}[A-Z][A-Z\d]Z[A-Z\d]\b/);
+ var h='<div class="card" style="background:var(--bg)"><b>'+esc(kind[0])+'</b><p>'+esc(kind[1])+'</p><p class="small">'+(gstin?'GSTIN: '+gstin[0]+'<br>':'')+(amt?'Amount mentioned: Rs '+amt[1]+'<br>':'')+(due?'Reply deadline: <b>'+fmt(due)+'</b> ('+daysFrom(due)+' days from today)':'Deadline not found - please check the notice.')+'</p><b>Documents to prepare</b><ul>';
+ kind[2].forEach(function(x){h+='<li>'+esc(x)+'</li>'});
+ h+='</ul>';
+ if(due)h+='<button class="pri" id="addN">Add to my calendar</button>';
+ $('nout').innerHTML=h+'</div>';
+ if(due)$('addN').onclick=function(){
+  S.extra.push({id:'n'+Date.now(),title:'Reply to '+kind[0]+' notice',due:iso(due),note:amt?'Amount: Rs '+amt[1]:'From notice reader',docs:kind[2]});
+  save();renderCal();show('cal');
+ };
+};
+
+// penalty meter
+$('calcP').onclick=function(){
+ var due=$('pdue').value,fl=$('pfile').value;
+ if(!due||!fl){$('pout').innerHTML='Please pick both dates.';return}
+ var days=Math.round((new Date(fl)-new Date(due))/864e5);
+ if(days<=0){$('pout').innerHTML='<b>No penalty</b> - you are on time.';return}
+ var nil=$('pnil').value=='1',cap=nil?500:{s:2000,m:5000,l:10000}[$('pslab').value];
+ var fee=Math.min(days*(nil?20:50),cap),tax=+$('ptax').value||0,intr=nil?0:Math.round(tax*0.18*days/365);
+ $('pout').innerHTML='Days late: '+days+'<br>Late fee: <b>Rs '+fee+'</b>'+(fee==cap?' (cap reached)':'')+'<br>Interest on tax: <b>Rs '+intr+'</b><br>Total extra cost: <b>Rs '+(fee+intr)+'</b>';
+};
+
+// tabs
+function show(id){
+ ['profile','cal','notice','pen'].forEach(function(x){$(x).classList.toggle('hide',x!=id)});
+ document.querySelectorAll('.tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.tab==id)});
+ if(id=='cal')renderCal();
+}
+document.querySelectorAll('.tabs button').forEach(function(b){b.onclick=function(){show(b.dataset.tab)}});
+
+load();
+if(S.profile){fillProfile(S.profile)}else fssaiToggle();
+$('pdue').value=iso(today);$('pfile').value=iso(today);
+</script>
+</body>
+</html>
